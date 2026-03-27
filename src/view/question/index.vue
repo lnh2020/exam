@@ -53,7 +53,9 @@ const code = computed(() => route.params.code)
 const percentage = computed(() => parseInt(((active_question_index.value + 1) / question_list.value.length) * 100))
 
 watch(() => props.type, (type) => {
-    axios.get(`/json/${code.value}/${type}.json`).then(res => {
+    const url = import.meta.env.MODE === "development" ? `/json/${code.value}/${type}.json` : `/exam/json/${code.value}/${type}.json`
+
+    axios.get(url).then(res => {
         question_list.value = shuffle(res.data)
     })
 }, {immediate: true})
