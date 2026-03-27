@@ -7,7 +7,7 @@ export default defineConfig(({mode}) => {
   console.log(`output->mode`,mode)
   return {
     plugins: [vue()],
-    base: mode === 'development' ? './' : '/exam/',
+    base: './',
     resolve: {
       alias: {
         "@": path.resolve(__dirname, 'src')
