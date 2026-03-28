@@ -54,7 +54,7 @@ const percentage = computed(() => parseInt(((active_question_index.value + 1) / 
 
 watch(() => props.type, (type) => {
     const url = import.meta.env.MODE === "development" ? `/json/${code.value}/${type}.json` : `/exam/json/${code.value}/${type}.json`
-
+    active_question_index.value = 0
     axios.get(url).then(res => {
         question_list.value = shuffle(res.data)
     })

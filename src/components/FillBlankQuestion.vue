@@ -35,11 +35,11 @@
       </div>
     </div>
 
-    <div class="action-buttons">
+    <div class="action-buttons" v-if="!examStore.show_answer">
       <el-button type="primary" size="small" @click="showAnswer = !showAnswer">
         {{ showAnswer ? '隐藏答案' : '查看答案' }}
       </el-button>
-      <el-button type="info" size="small" @click="clearAnswer" v-if="userAnswer && !examStore.show_answer">
+      <el-button type="info" size="small" @click="clearAnswer" v-if="userAnswer">
         清除答案
       </el-button>
     </div>
@@ -70,13 +70,15 @@ const formattedQuestion = computed(() => {
   return props.question.题目.replace(/______/g, '<span class="blank">______</span>')
 })
 
-watch(() => [examStore.show_answer, props.question.id, props.index], newv => {
-  if (newv[0]) userAnswer.value = props.question.答案
-}, {immediate: true})
-
 const clearAnswer = () => {
   userAnswer.value = ''
 }
+
+watch(() => [examStore.show_answer, props.question.id, props.index], newv => {
+  if (newv[0]) userAnswer.value = props.question.答案
+  else clearAnswer()
+}, {immediate: true})
+
 </script>
 
 <style scoped>
