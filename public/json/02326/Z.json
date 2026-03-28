@@ -166,5 +166,165 @@
         "答案": "<div style='font-family: \"宋体\", SimSun;'><p><strong>(1) 采用先来先服务调度算法时</strong><br>选中运行的次序：P<sub>1</sub> → P<sub>2</sub> → P<sub>3</sub> → P<sub>4</sub> → P<sub>5</sub><br>平均等待时间：(0+9+10+12+13)/5 = 44/5 = 8.8（分钟）</p><p><strong>(2) 采用非抢占式的优先级调度算法时</strong><br>选中运行的次序：P<sub>1</sub> → P<sub>4</sub> → P<sub>3</sub> → P<sub>5</sub> → P<sub>2</sub><br>平均等待时间：(0+9+14+16+10)/5 = 49/5 = 9.8（分钟）</p></div>",
         "考点": "进程调度算法",
         "解析": ""
+    },
+    {
+        "id": "mtmyjysj1_36",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>有5个进程 P<sub>1</sub>、P<sub>2</sub>、P<sub>3</sub>、P<sub>4</sub>、P<sub>5</sub>，它们同时依次进入就绪队列，它们的优先数和需要的处理时间如下表所示。<br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>处理器时间/μs</th><th>优先级</th> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>10</td><td>3</td></tr> <tr><td>P<sub>2</sub></td><td>1</td><td>1</td></tr> <tr><td>P<sub>3</sub></td><td>2</td><td>3</td></tr> <tr><td>P<sub>4</sub></td><td>1</td><td>4</td></tr> <tr><td>P<sub>5</sub></td><td>5</td><td>2</td></tr> </tbody> </table><br/>忽略进行调度等所花费的时间，请回答下列问题：<br/>(1) 写出分别采用先来先服务和轮转调度的优先级调度算法中进程执行的次序。<br/>(2) 分别计算上述两种算法中各进程的等待时间和平均等待时间。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>（1）采用先来先服务调度算法的进程调度次序：</b><br/>P<sub>1</sub> → P<sub>2</sub> → P<sub>3</sub> → P<sub>4</sub> → P<sub>5</sub><br/><br/><b>采用非抢占式的优先级调度算法的进程调度次序：</b><br/>P<sub>1</sub> → P<sub>2</sub> → P<sub>3</sub> → P<sub>4</sub> → P<sub>5</sub><br/><br/><b>（2）采用先来先服务调度算法时，各进程的等待时间如下。</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>等待时间</th><th>运行时间</th></tr> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>0</td><td>10</td></tr> <tr><td>P<sub>2</sub></td><td>10</td><td>1</td></tr> <tr><td>P<sub>3</sub></td><td>11</td><td>2</td></tr> <tr><td>P<sub>4</sub></td><td>13</td><td>1</td></tr> <tr><td>P<sub>5</sub></td><td>14</td><td>5</td></tr> </tbody> </table><br/>平均等待时间：(0+10+11+13+14)/5 = 9.6 (μs)<br/><br/><b>采用非抢占式的优先级调度算法时，各进程的等待时间如下。</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>等待时间</th></tr> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>0</td></tr> <tr><td>P<sub>2</sub></td><td>10</td></tr> <tr><td>P<sub>3</sub></td><td>11</td></tr> <tr><td>P<sub>4</sub></td><td>18</td></tr> <tr><td>P<sub>5</sub></td><td>16</td></tr> </tbody> </table><br/>平均等待时间：(0+10+11+16+18)/5 = 11 (μs)</div>",
+        "考点": "先来先服务算法、优先级调度算法",
+        "解析": "先来先服务算法按进程到达顺序调度，优先级调度算法按优先级高低调度（优先级数值小的优先）。"
+    },
+    {
+        "id": "mtmyjysj1_37",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>假设有一个成品仓库，总共能存放8台成品，生产者进程生产产品放入仓库，消费者进程从仓库中取出成品消费。为了防止积压，仓库满的时候停止生产。由于仓库搬运设备只有一套，故成品的存入和取出只能分别执行，使用P、V操作来实现该方案。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>使用 P、V 操作来实现该方案的过程如下。<br/><br/>begin<br/>    mutex, full, empty: semaphore;<br/>    mutex := 1;<br/>    empty := 8;<br/>    full := 0;<br/><br/>    cobegin<br/><br/>        process Producer<br/>        begin<br/>            L1: 生产一个成品；<br/>            P(empty);<br/>            P(mutex);<br/>            将产品存入仓库；<br/>            V(mutex);<br/>            V(full);<br/>            goto L1;<br/>        end;<br/><br/>        process Consumer<br/>        begin<br/>            L2: P(full);<br/>            P(mutex);<br/>            将产品从仓库取出；<br/>            V(mutex);<br/>            V(empty);<br/>            消费成品；<br/>            goto L2;<br/>        end;<br/><br/>    coend;<br/>end;</div>",
+        "考点": "P、V操作",
+        "解析": "使用信号量empty表示空缓冲区数量，full表示产品数量，mutex实现互斥访问仓库。"
+    },
+    {
+        "id": "mtmyjysj1_38",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>假定某系统当时的资源分配图如下所示。<br/><br/>（图略，描述如下：<br/>存在进程 P<sub>1</sub>、P<sub>2</sub>、P<sub>3</sub>，资源 R<sub>1</sub>、R<sub>2</sub>、R<sub>3</sub>。<br/>P<sub>1</sub> 持有 R<sub>1</sub>，请求 R<sub>2</sub>；<br/>P<sub>2</sub> 持有 R<sub>2</sub>，请求 R<sub>3</sub>；<br/>P<sub>3</sub> 持有 R<sub>3</sub>。）<br/><br/>(1) 分析当时系统是否存在死锁。<br/>(2) 若进程 P<sub>3</sub> 再申请 R<sub>3</sub> 时，系统将发生什么变化，说明原因。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>(1) 因为当时系统的资源分配图中不存在环路，所以不存在死锁。<br/><br/>(2) 当进程 P<sub>3</sub> 申请资源 R<sub>3</sub> 后，资源分配图中形成环路 P<sub>2</sub> → R<sub>2</sub> → P<sub>3</sub> → R<sub>3</sub> → P<sub>2</sub>，而 R<sub>2</sub>、R<sub>3</sub> 都是单个资源的类，该环路无法消除，所以进程 P<sub>2</sub>、P<sub>3</sub> 永远处于等待状态，从而引起死锁。</div>",
+        "考点": "死锁检测",
+        "解析": "通过资源分配图判断死锁，存在环路且资源实例为1时可能发生死锁。"
+    },
+    {
+        "id": "mtmyjysj1_39",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>某 UNIX 操作系统采用 i 结点管理文件的存储空间。假设 i 结点包括 13 个地址项，其中 10 个地址项用来存放直接地址，一个地址项存放一重间接地址，一个地址项存放二重间接地址，一个地址项存放三重间接地址。每个磁盘块地址占 64 位（8 个字节），磁盘块大小为 2048 字节，如果要存取某文件的字节偏移量是 1260544，请问，需要读取几次硬盘？请写出中间过程。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>计算过程：<br/><br/>1. 计算盘块号：1260544 ÷ 2048 = 615.5，因此地址在第 615 个盘块中（从0开始计数）。<br/><br/>2. 去掉10个直接地址：615 - 10 = 605。<br/><br/>3. 一个一重间接地址：每个盘块大小为 2048 字节，每个地址占 8 个字节，所以每个盘块中可以存放 2048 ÷ 8 = 256 个盘块号。<br/>   605 - 256 = 349。<br/><br/>4. 一个二重间接地址：能存放 256 个一重间接地址，第一个一重间接地址放 256 个盘块号，所以第 349 个盘块号在二重间接地址中。<br/><br/>5. 访问次数：需要先读取该文件的 i 结点的盘块，访问一次一重间接地址的盘块，访问一次二重间接地址的盘块，再访问 1260544 地址的盘块。<br/><br/>因此，共需要访问磁盘 <b>4 次</b>。</div>",
+        "考点": "i结点文件存储",
+        "解析": "通过计算字节偏移量对应的盘块号，确定需要访问的间接地址层次。"
+    },
+    {
+        "id": "mtmyjysj2_36",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>在多个生产者—消费者问题中，设置信号量 mutex,初值为1,用于实现临界区（环形缓冲区）的互斥；信号量 empty,初值为k,用于表示缓冲池中空缓冲区的数目；信号量 full,初值为0,用于表示缓冲区中产品的数目。另设整型变量 i 和 j,初值均为0,i 表示空缓冲区的头指针,j 表示有产品缓冲区的头指针。该算法的描述程序如下所示，请在有序号的空行上填写适当的关于信号量 mutex,empty 和 full 的 P,V 操作或缓冲区头指针变化的赋值语句。<br/><br/>生产者进程 P<sub>1</sub>, P<sub>2</sub>, ..., P<sub>n</sub>:<br/>i = 0;<br/>while(true) {<br/>    生产一个产品；<br/>    P(empty);<br/>    ①<br/>    往 Buffer[i] 中放一个产品；<br/>    i = (i+1) mod k;<br/>    V(mutex);<br/>    ②<br/>};<br/><br/>消费者进程 Q<sub>1</sub>, Q<sub>2</sub>, ..., Q<sub>m</sub>:<br/>j = 0;<br/>while(true) {<br/>    P(full);<br/>    ③<br/>    往 Buffer[j] 中取一个产品；<br/>    ④<br/>    V(mutex);<br/>    ⑤<br/>    消费一个产品；<br/>};</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>① P(mutex)<br/>② V(full)<br/>③ P(mutex)<br/>④ j = (j+1) mod k<br/>⑤ V(empty)</div>",
+        "考点": "生产者-消费者问题",
+        "解析": "生产者-消费者问题中，需要互斥访问缓冲区，同步空缓冲区和满缓冲区数量。"
+    },
+    {
+        "id": "mtmyjysj2_37",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>假设一个活动头磁盘有200道，编号从0~199。当前磁头正在143道上服务，并且刚刚完成了125道的请求。现有如下访盘请求序列（磁盘号）：<br/>86,147,91,177,94,150,102,175,130<br/>试给出采用下列算法后磁头移动的顺序和移动总量（总磁道数）。<br/>(1) 最短寻找时间优先调度算法。<br/>(2) 单向扫描调度算法。（假设沿磁头移动方向不再有访问请求时，磁头沿相反方向移动）</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>(1) 最短寻找时间优先调度算法：</b><br/>磁头移动的顺序：143→147→150→130→102→94→91→86→175→177<br/>移动总量：4+3+20+28+8+3+5+89+2 = 162<br/><br/><b>(2) 单向扫描调度算法：</b><br/>磁头移动的顺序：143→147→150→175→177→130→102→94→91→86<br/>移动总量：4+3+25+2+47+28+8+3+5 = 125</div>",
+        "考点": "磁盘调度算法",
+        "解析": "最短寻找时间优先算法选择离当前磁头最近的请求；单向扫描算法沿一个方向扫描，到尽头后反向。"
+    },
+    {
+        "id": "mtmyjysj2_38",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>若某一系统有同类资源12个，进程A、B、C所需的资源总数分别为5,10,7。下表中列出了这些进程向系统中请求资源的次序和数量，请回答：<br/>(1) 如果采用银行家算法分配资源，请写出完成第5次分配后各进程的状态及所占资源量。<br/>(2) 请继续完成以后的资源分配，直到全部进程满足资源分配的要求。<br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse;'> <thead> <tr><th>次序</th><th>进程</th><th>申请量</th></tr> </thead> <tbody> <tr><td>1</td><td>B</td><td>4</td></tr> <tr><td>2</td><td>C</td><td>3</td></tr> <tr><td>3</td><td>A</td><td>3</td></tr> <tr><td>4</td><td>C</td><td>2</td></tr> <tr><td>5</td><td>B</td><td>2</td></tr> <tr><td>6</td><td>A</td><td>2</td></tr> <tr><td>7</td><td>B</td><td>4</td></tr> <tr><td>8</td><td>C</td><td>3</td></tr> </tbody> </table></div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>(1) 完成第5次分配后各进程的状态及所占资源量：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>最大需求量</th><th>已占资源量</th><th>尚需资源量</th></tr> </thead> <tbody> <tr><td>A</td><td>5</td><td>5</td><td>0</td></tr> <tr><td>B</td><td>10</td><td>4</td><td>6</td></tr> <tr><td>C</td><td>7</td><td>5</td><td>2</td></tr> </tbody> </table><br/>此时系统剩余资源量为：0<br/><br/><b>(2) 后续分配过程：</b><br/><br/>第6次申请：进程A申请2个资源，但A已满足最大需求，实际上A已完成并释放资源。<br/>当进程A归还资源后，可分配资源达到5个，此时可满足进程C的尚需资源量(2)，完成第4次申请（C申请2个）。<br/>进程C完成后归还资源，可分配资源达到7个，此时可满足进程B的尚需资源量(6)，完成第5次申请（B申请2个）和第7次申请（B申请4个）。<br/><br/><b>最终所有进程均满足资源分配要求。</b></div>",
+        "考点": "银行家算法",
+        "解析": "银行家算法在分配资源前检查安全性，避免系统进入不安全状态。"
+    },
+    {
+        "id": "mtmyjysj2_39",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>设某进程访问内存的页面按照以下序列：1,2,3,6,4,7,3,2,1,4,7,5,6,5,2,1。当进程分得的页面数为4的时候，分别计算下列置换算法的缺页数。要求写出详细计算过程。（初始主存为空）<br/><br/>(1) 理想页面置换算法（OPT）。<br/>(2) 最近最少使用页面置换算法（LRU）。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>(1) 理想页面置换算法（OPT）：</b><br/><br/>置换过程（淘汰将来最远要访问的页面）：<br/><br/>访问序列：1,2,3,6,4,7,3,2,1,4,7,5,6,5,2,1<br/><br/>内存块（4个）：<br/>初始为空：缺页<br/>1: 缺页 [1]<br/>2: 缺页 [1,2]<br/>3: 缺页 [1,2,3]<br/>6: 缺页 [1,2,3,6]<br/>4: 缺页（淘汰6，因为6最远使用）→ [1,2,3,4]<br/>7: 缺页（淘汰4）→ [1,2,3,7]<br/>3: 不缺页<br/>2: 不缺页<br/>1: 不缺页<br/>4: 缺页（淘汰7）→ [1,2,3,4]<br/>7: 缺页（淘汰3）→ [1,2,4,7]<br/>5: 缺页（淘汰1）→ [5,2,4,7]<br/>6: 缺页（淘汰2）→ [5,6,4,7]<br/>5: 不缺页<br/>2: 缺页（淘汰4）→ [5,6,2,7]<br/>1: 缺页（淘汰7）→ [5,6,2,1]<br/><br/><b>缺页次数：12次</b><br/><br/><b>(2) 最近最少使用页面置换算法（LRU）：</b><br/><br/>置换过程（淘汰最近最久未使用的页面）：<br/><br/>访问序列：1,2,3,6,4,7,3,2,1,4,7,5,6,5,2,1<br/><br/>内存块（4个）：<br/>初始为空：缺页<br/>1: 缺页 [1]<br/>2: 缺页 [1,2]<br/>3: 缺页 [1,2,3]<br/>6: 缺页 [1,2,3,6]<br/>4: 缺页（淘汰1）→ [4,2,3,6]<br/>7: 缺页（淘汰2）→ [4,7,3,6]<br/>3: 不缺页 → [4,7,3,6]<br/>2: 缺页（淘汰6）→ [4,7,3,2]<br/>1: 缺页（淘汰4）→ [1,7,3,2]<br/>4: 缺页（淘汰7）→ [1,4,3,2]<br/>7: 缺页（淘汰3）→ [1,4,7,2]<br/>5: 缺页（淘汰2）→ [1,4,7,5]<br/>6: 缺页（淘汰1）→ [6,4,7,5]<br/>5: 不缺页 → [6,4,7,5]<br/>2: 缺页（淘汰4）→ [6,2,7,5]<br/>1: 缺页（淘汰7）→ [6,2,1,5]<br/><br/><b>缺页次数：13次</b></div>",
+        "考点": "页面置换算法",
+        "解析": "OPT算法淘汰将来最远要访问的页面；LRU算法淘汰最近最久未使用的页面。"
+    },
+    {
+        "id": "fzstyl3_36",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>某程序在内存分配四个页面，初始为空，所需页面的走向为0,1,7,2,3,2,7,1,0,3，请给出采用先进先出页面置换算法（FIFO）和最近最少使用页面置换算法（LRU）时的页面置换过程。并计算相应的缺页次数及缺页率？<br/><br/>（注：FIFO算法中，“时间最长-页”表示在内存时间最长的页面，“时间长-页”其次，“时间短-页”表示在内存时间最短的页面。LRU算法中，“时间最长-页”表示未使用时间最长的页面，“时间长-页”其次，“时间短-页”表示未使用时间最短的页面。）</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>先进先出页面置换算法（FIFO）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>页面走向</th><th>0</th><th>1</th><th>7</th><th>2</th><th>3</th><th>2</th><th>7</th><th>1</th><th>0</th><th>3</th></tr> </thead> <tbody> <tr><td>时间短-页</td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>3</td><td>3</td><td>1</td><td>0</td><td>0</td></tr> <tr><td>时间中-页</td><td></td><td>0</td><td>1</td><td>7</td><td>2</td><td>2</td><td>2</td><td>3</td><td>1</td><td>1</td></tr> <tr><td>时间长-页</td><td></td><td></td><td>0</td><td>1</td><td>7</td><td>7</td><td>7</td><td>2</td><td>3</td><td>3</td></tr> <tr><td>时间最长-页</td><td></td><td></td><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>7</td><td>2</td><td>2</td></tr> <tr><td>是否缺页</td><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>√</td><td>√</td><td>×</td><td>×</td><td>×</td></tr> </tbody> </table><br/>缺页异常6次，缺页率为6/10=60%<br/><br/><b>最近最少使用页面置换算法（LRU）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>页面走向</th><th>0</th><th>1</th><th>7</th><th>2</th><th>3</th><th>2</th><th>7</th><th>1</th><th>0</th><th>3</th></tr> </thead> <tbody> <tr><td>时间短-页</td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>2</td><td>7</td><td>1</td><td>0</td><td>3</td></tr> <tr><td>时间中-页</td><td></td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>2</td><td>7</td><td>1</td><td>0</td></tr> <tr><td>时间长-页</td><td></td><td></td><td>0</td><td>1</td><td>7</td><td>7</td><td>3</td><td>2</td><td>7</td><td>1</td></tr> <tr><td>时间最长-页</td><td></td><td></td><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>3</td><td>2</td><td>7</td></tr> <tr><td>是否缺页</td><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>√</td><td>√</td><td>×</td><td>×</td><td>×</td></tr> </tbody> </table><br/>缺页异常7次，缺页率为7/10=70%</div>",
+        "考点": "页面置换算法",
+        "解析": "FIFO算法淘汰最早进入内存的页面；LRU算法淘汰最近最久未使用的页面。"
+    },
+    {
+        "id": "fzstyl3_37",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>设有两个优先级相同的进程 P<sub>1</sub> 和 P<sub>2</sub>，代码如下所示。信号量 S<sub>1</sub> 和 S<sub>2</sub> 的初值均为0，试问 P<sub>1</sub> 和 P<sub>2</sub> 并发执行后，x、y、z 的值各是多少？进程 P<sub>1</sub> 和 P<sub>2</sub> 之间是什么关系？<br/><br/>进程 P<sub>1</sub>：<br/>y = 1;<br/>y = y + 2;<br/>z = y + 1;<br/>V(S<sub>1</sub>);<br/>P(S<sub>1</sub>);<br/>x = x + y;<br/>P(S<sub>2</sub>);<br/>z = x + z;<br/>V(S<sub>2</sub>);<br/><br/>进程 P<sub>2</sub>：<br/>x = 1;<br/>x = x + 1;<br/>P(S<sub>1</sub>);<br/>x = x + y;<br/>V(S<sub>2</sub>);</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>P<sub>1</sub> 和 P<sub>2</sub> 并发执行后，<br/><br/>x = 5<br/>y = 12<br/>z = 9<br/><br/>进程 P<sub>1</sub> 和 P<sub>2</sub> 之间是同步关系。</div>",
+        "考点": "P、V操作与进程同步",
+        "解析": "通过信号量S1和S2实现进程间的同步，确保执行顺序。"
+    },
+    {
+        "id": "fzstyl3_38",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>假定有下列要执行的进程：<br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>到达时间</th><th>执行时间</th><th>优先数</th></tr> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>0</td><td>10</td><td>3</td></tr> <tr><td>P<sub>2</sub></td><td>1</td><td>4</td><td>2</td></tr> <tr><td>P<sub>3</sub></td><td>2</td><td>6</td><td>1</td></tr> </tbody> </table><br/>忽略设备工作时间和系统进行调度的时间。<br/>(1) 若采用先来先服务算法，各个进程的周转时间是多少？平均周转时间是多少？<br/>(2) 若采用非抢占式优先级调度算法（优先数大的优先级低），各个进程的周转时间是多少？平均周转时间是多少？</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>(1) 采用先来先服务算法：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>到达时间</th><th>执行时间</th><th>完成时间</th><th>周转时间</th></tr> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>0</td><td>10</td><td>10</td><td>10</td></tr> <tr><td>P<sub>2</sub></td><td>1</td><td>4</td><td>14</td><td>13</td></tr> <tr><td>P<sub>3</sub></td><td>2</td><td>6</td><td>20</td><td>18</td></tr> </tbody> </table><br/>平均周转时间 = (10+13+18)/3 = 13.67<br/><br/><b>(2) 采用非抢占式优先级调度算法（优先数大的优先级低）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>到达时间</th><th>执行时间</th><th>完成时间</th><th>周转时间</th></tr> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>0</td><td>10</td><td>10</td><td>10</td></tr> <tr><td>P<sub>3</sub></td><td>2</td><td>6</td><td>16</td><td>14</td></tr> <tr><td>P<sub>2</sub></td><td>1</td><td>4</td><td>20</td><td>19</td></tr> </tbody> </table><br/>平均周转时间 = (10+14+19)/3 = 14.33</div>",
+        "考点": "进程调度算法",
+        "解析": "先来先服务按到达时间顺序调度；优先级调度按优先级高低调度（优先数小优先）。"
+    },
+    {
+        "id": "fzstyl3_39",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>设系统中有4个进程 P<sub>1</sub>、P<sub>2</sub>、P<sub>3</sub>、P<sub>4</sub>，在某一时刻系统状态如下。<br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>进程</th><th>最大需求量</th><th>已分配资源量</th><th>剩余资源量</th></tr> </thead> <tbody> <tr><td>P<sub>1</sub></td><td>9</td><td>4</td><td>5</td></tr> <tr><td>P<sub>2</sub></td><td>5</td><td>1</td><td>4</td></tr> <tr><td>P<sub>3</sub></td><td>4</td><td>2</td><td>2</td></tr> <tr><td>P<sub>4</sub></td><td>2</td><td>1</td><td>1</td></tr> </tbody> </table><br/>系统是否处于安全状态？如是，则给出所有的安全进程执行序列。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>系统处于安全状态。<br/><br/>安全进程执行序列为：P<sub>4</sub> → P<sub>3</sub> → P<sub>2</sub> → P<sub>1</sub><br/><br/>计算过程：<br/>当前剩余资源量：5<br/>P<sub>4</sub>尚需1个资源，可满足，执行后释放1个资源，剩余资源变为6<br/>P<sub>3</sub>尚需2个资源，可满足，执行后释放2个资源，剩余资源变为8<br/>P<sub>2</sub>尚需4个资源，可满足，执行后释放1个资源，剩余资源变为9<br/>P<sub>1</sub>尚需5个资源，可满足，执行完成<br/><br/>因此存在安全序列 P<sub>4</sub>→P<sub>3</sub>→P<sub>2</sub>→P<sub>1</sub>。</div>",
+        "考点": "银行家算法",
+        "解析": "通过银行家算法判断系统是否处于安全状态，找出安全执行序列。"
+    },
+    {
+        "id": "fzstyl4_36",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>某程序在内存分配四个页面，初始为空，所需页面的走向为0,1,7,2,3,2,7,1,0,3，请给出采用先进先出页面置换算法（FIFO）和最近最少使用页面置换算法（LRU）时的页面置换过程。并计算相应的缺页次数及缺页率？<br/><br/>（注：FIFO算法中，“时间最长-页”表示在内存时间最长的页面，“时间长-页”其次，“时间短-页”表示在内存时间最短的页面。LRU算法中，“时间最长-页”表示未使用时间最长的页面，“时间长-页”其次，“时间短-页”表示未使用时间最短的页面。）</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>先进先出页面置换算法（FIFO）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>页面走向</th><th>0</th><th>1</th><th>7</th><th>2</th><th>3</th><th>2</th><th>7</th><th>1</th><th>0</th><th>3</th> </thead> <tbody> <tr><td>时间短-页</td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>3</td><td>3</td><td>1</td><td>0</td><td>0</td></tr> <tr><td>时间中-页</td><td></td><td>0</td><td>1</td><td>7</td><td>2</td><td>2</td><td>2</td><td>3</td><td>1</td><td>1</td></tr> <tr><td>时间长-页</td><td></td><td></td><td>0</td><td>1</td><td>7</td><td>7</td><td>7</td><td>2</td><td>3</td><td>3</td></tr> <tr><td>时间最长-页</td><td></td><td></td><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>7</td><td>2</td><td>2</td></tr> <tr><td>是否缺页</td><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>√</td><td>√</td><td>×</td><td>×</td><td>×</td></tr> </tbody> </table><br/>缺页异常6次，缺页率为6/10=60%<br/><br/><b>最近最少使用页面置换算法（LRU）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>页面走向</th><th>0</th><th>1</th><th>7</th><th>2</th><th>3</th><th>2</th><th>7</th><th>1</th><th>0</th><th>3</th></tr> </thead> <tbody> <tr><td>时间短-页</td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>2</td><td>7</td><td>1</td><td>0</td><td>3</td></tr> <tr><td>时间中-页</td><td></td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>2</td><td>7</td><td>1</td><td>0</td></tr> <tr><td>时间长-页</td><td></td><td></td><td>0</td><td>1</td><td>7</td><td>7</td><td>3</td><td>2</td><td>7</td><td>1</td></tr> <tr><td>时间最长-页</td><td></td><td></td><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>3</td><td>2</td><td>7</td></tr> <tr><td>是否缺页</td><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>√</td><td>√</td><td>×</td><td>×</td><td>×</td></tr> </tbody> </table><br/>缺页异常7次，缺页率为7/10=70%</div>",
+        "考点": "页面置换算法",
+        "解析": "FIFO算法淘汰最早进入内存的页面；LRU算法淘汰最近最久未使用的页面。"
+    },
+    {
+        "id": "fzstyl4_37",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>设有两个优先级相同的进程 P<sub>1</sub> 和 P<sub>2</sub>，代码如下所示。信号量 S<sub>1</sub> 和 S<sub>2</sub> 的初值均为0，试问 P<sub>1</sub> 和 P<sub>2</sub> 并发执行后，x、y、z 的值各是多少？进程 P<sub>1</sub> 和 P<sub>2</sub> 之间是什么关系？<br/><br/>进程 P<sub>1</sub>：<br/>y = 1;<br/>y = y + 2;<br/>z = y + 1;<br/>V(S<sub>1</sub>);<br/>P(S<sub>1</sub>);<br/>x = x + y;<br/>P(S<sub>2</sub>);<br/>z = x + z;<br/>V(S<sub>2</sub>);<br/><br/>进程 P<sub>2</sub>：<br/>x = 1;<br/>x = x + 1;<br/>P(S<sub>1</sub>);<br/>x = x + y;<br/>V(S<sub>2</sub>);</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>P<sub>1</sub> 和 P<sub>2</sub> 并发执行后，<br/><br/>x = 5<br/>y = 12<br/>z = 9<br/><br/>进程 P<sub>1</sub> 和 P<sub>2</sub> 之间是同步关系。</div>",
+        "考点": "P、V操作与进程同步",
+        "解析": "通过信号量S1和S2实现进程间的同步，确保执行顺序。"
+    },
+    {
+        "id": "fzstyl4_38",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>生产围棋的工人不小心把相等数量的黑子和白子混装在一个盒子里，现在要用自动分拣系统把黑子和白子分开，该系统由两个并发执行的进程 PA 和 PB 组成，系统功能如下。<br/><br/>(1) PA 专挑黑子，PB 专挑白子。<br/>(2) 每个进程每次只挑一个子，当一个进程被选中时，不允许另一个进程去拣子。<br/>(3) 当一个进程拣了一个子（黑或白）后，必须让另一个进程去拣一个子（白或黑）。<br/><br/>请回答：<br/>(1) 这两个并发进程之间的关系是同步还是互斥？<br/>(2) 写出 P、V 操作管理时应定义的信号量及其初值。<br/>(3) 根据定义的信号量，写出用 P、V 操作管理两个并发进程的程序。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>(1)</b> 两个进程之间是同步关系。因为这两个进程都要从盒子里面去拣棋子，但规定了两个进程必须轮流取不同的颜色的棋子，因而相互间要互通消息，这显然是一个进程同步问题。<br/><br/><b>(2)</b> 在该问题中，应该区分\"允许拣黑子\"和\"允许拣白子\"两个消息，所以应该定义两个信号量 S<sub>1</sub> 和 S<sub>2</sub>，分别和两个消息相对应，初值是 S<sub>1</sub> = 1; S<sub>2</sub> = 0 或者 S<sub>1</sub> = 0; S<sub>2</sub> = 1。<br/><br/><b>(3)</b> 程序如下：<br/><br/>begin<br/>    S<sub>1</sub>, S<sub>2</sub>: semaphore;<br/>    S<sub>1</sub> = 1;<br/>    S<sub>2</sub> = 0;<br/>    cobegin<br/>        process PA<br/>        begin<br/>            L1: P(S<sub>1</sub>);<br/>                拣黑子;<br/>                V(S<sub>2</sub>);<br/>                goto L1;<br/>        end;<br/>        process PB<br/>        begin<br/>            L2: P(S<sub>2</sub>);<br/>                拣白子;<br/>                V(S<sub>1</sub>);<br/>                goto L2;<br/>        end;<br/>    coend;<br/>end;</div>",
+        "考点": "P、V操作与进程同步",
+        "解析": "两个进程需要轮流执行，属于同步关系，通过信号量实现交替执行。"
+    },
+    {
+        "id": "fzstyl4_39",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>设一个文件由100个磁盘物理块组成，已处于打开可读写状态，主存中已有待写文件的物理块的信息。对于链接和索引两种存储结构，分别计算执行下列操作时应启动I/O的次数，填入下面表格中，并简要说明理由。<br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>存储结构</th><th>链接结构</th><th>索引结构</th></tr> </thead> <tbody> <tr><td>插入操作</td><td>0</td><td>0</td></tr> <tr><td>删除操作</td><td>0</td><td>0</td></tr> </tbody> </table><br/>注：链接方式使用的是单向指针，并设有头、尾指针。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>存储结构</th><th>链接结构</th><th>索引结构</th></tr> </thead> <tbody> <tr><td>插在文件的开头</td><td>1次（写入插入块，指针指向原第一块）</td><td>1次（写入插入块，管理索引表的时间不计）</td></tr> <tr><td>插在文件中作为第51块</td><td>51次（按链接指针读50次再写入插入块）</td><td>1次（写入插入块，管理索引表的时间不计）</td></tr> <tr><td>插在文件的末尾</td><td>3次（读写原末尾块各1次，写入插入块1次）</td><td>1次（写入插入块，管理索引表的时间不计）</td></tr> <tr><td>删除操作</td><td>查找前驱需要50次，删除1次，共51次</td><td>1次（修改索引表）</td></tr> </tbody> </table><br/><b>说明：</b><br/>链接结构需要沿着链接指针逐个读取物理块，插入和删除操作需要找到目标位置；索引结构通过索引表直接定位，只需一次I/O操作。</div>",
+        "考点": "文件物理结构",
+        "解析": "链接结构需要顺序访问，I/O次数与位置有关；索引结构通过索引表直接定位，I/O次数较少。"
+    },
+    {
+        "id": "fzstyl5_36",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>某程序在内存分配四个页面，初始为空，所需页面的走向为0,1,7,2,3,2,7,1,0,3，请给出采用先进先出页面置换算法（FIFO）和最近最少使用页面置换算法（LRU）时的页面置换过程。并计算相应的缺页次数及缺页率？<br/><br/>（注：FIFO算法中，“时间最长-页”表示在内存时间最长的页面，“时间长-页”其次，“时间短-页”表示在内存时间最短的页面。LRU算法中，“时间最长-页”表示未使用时间最长的页面，“时间长-页”其次，“时间短-页”表示未使用时间最短的页面。）</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>先进先出页面置换算法（FIFO）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>页面走向</th><th>0</th><th>1</th><th>7</th><th>2</th><th>3</th><th>2</th><th>7</th><th>1</th><th>0</th><th>3</th></tr> </thead> <tbody> <tr><td>时间短-页</td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>3</td><td>3</td><td>1</td><td>0</td><td>0</td></tr> <tr><td>时间中-页</td><td></td><td>0</td><td>1</td><td>7</td><td>2</td><td>2</td><td>2</td><td>3</td><td>1</td><td>1</td></tr> <tr><td>时间长-页</td><td></td><td></td><td>0</td><td>1</td><td>7</td><td>7</td><td>7</td><td>2</td><td>3</td><td>3</td></tr> <tr><td>时间最长-页</td><td></td><td></td><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>7</td><td>2</td><td>2</td></tr> <tr><td>是否缺页</td><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>√</td><td>√</td><td>×</td><td>×</td><td>×</td></tr> </tbody> </table><br/>缺页异常6次，缺页率为6/10=60%<br/><br/><b>最近最少使用页面置换算法（LRU）：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>页面走向</th><th>0</th><th>1</th><th>7</th><th>2</th><th>3</th><th>2</th><th>7</th><th>1</th><th>0</th><th>3</th></tr> </thead> <tbody> <tr><td>时间短-页</td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>2</td><td>7</td><td>1</td><td>0</td><td>3</td></tr> <tr><td>时间中-页</td><td></td><td>0</td><td>1</td><td>7</td><td>2</td><td>3</td><td>2</td><td>7</td><td>1</td><td>0</td></tr> <tr><td>时间长-页</td><td></td><td></td><td>0</td><td>1</td><td>7</td><td>7</td><td>3</td><td>2</td><td>7</td><td>1</td></tr> <tr><td>时间最长-页</td><td></td><td></td><td></td><td>0</td><td>1</td><td>1</td><td>1</td><td>3</td><td>2</td><td>7</td></tr> <tr><td>是否缺页</td><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>√</td><td>√</td><td>×</td><td>×</td><td>×</td></tr> </tbody> </table><br/>缺页异常7次，缺页率为7/10=70%</div>",
+        "考点": "页面置换算法",
+        "解析": "FIFO算法淘汰最早进入内存的页面；LRU算法淘汰最近最久未使用的页面。"
+    },
+    {
+        "id": "fzstyl5_37",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>设有两个优先级相同的进程 P<sub>1</sub> 和 P<sub>2</sub>，代码如下所示。信号量 S<sub>1</sub> 和 S<sub>2</sub> 的初值均为0，试问 P<sub>1</sub> 和 P<sub>2</sub> 并发执行后，x、y、z 的值各是多少？进程 P<sub>1</sub> 和 P<sub>2</sub> 之间是什么关系？<br/><br/>进程 P<sub>1</sub>：<br/>y = 1;<br/>y = y + 2;<br/>z = y + 1;<br/>V(S<sub>1</sub>);<br/>P(S<sub>1</sub>);<br/>x = x + y;<br/>P(S<sub>2</sub>);<br/>z = x + z;<br/>V(S<sub>2</sub>);<br/><br/>进程 P<sub>2</sub>：<br/>x = 1;<br/>x = x + 1;<br/>P(S<sub>1</sub>);<br/>x = x + y;<br/>V(S<sub>2</sub>);</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>P<sub>1</sub> 和 P<sub>2</sub> 并发执行后，<br/><br/>x = 5<br/>y = 12<br/>z = 9<br/><br/>进程 P<sub>1</sub> 和 P<sub>2</sub> 之间是同步关系。</div>",
+        "考点": "P、V操作与进程同步",
+        "解析": "通过信号量S1和S2实现进程间的同步，确保执行顺序。"
+    },
+    {
+        "id": "fzstyl5_38",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>假定某磁盘的旋转速度是每圈48ms，格式化后每个盘面被分成8个扇区，现有8个逻辑记录存储在同一个磁道上。安排如下所示：<br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>扇区号</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr> </thead> <tbody> <tr><td>逻辑记录</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td></tr> </tbody> </table><br/>处理程序要顺序处理以上记录，每读出一个记录后要花12ms的时间进行处理，然后再顺序读下一个记录并进行处理。请问：<br/>(1) 顺序处理完这8个记录总共花费了多少时间？<br/>(2) 现对记录进行优化分布，使处理程序能在最短时间内处理完这8个记录。请给出记录优化分布的示意图，并计算所需时间。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'><b>(1) 顺序处理完这8个记录总共花费的时间为：</b><br/>8×(6+12)+7×36=396(ms)<br/><br/><b>(2) 记录优化分布如下：</b><br/><br/><table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; text-align: center;'> <thead> <tr><th>扇区号</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr> </thead> <tbody> <tr><td>逻辑记录</td><td>A</td><td>E</td><td>B</td><td>F</td><td>C</td><td>G</td><td>D</td><td>H</td></tr> </tbody> </table><br/>所需时间为：8×(6+12)=144(ms)</div>",
+        "考点": "磁盘调度与记录优化",
+        "解析": "记录优化分布使处理完一个记录后，磁头刚好转到下一个要处理的记录位置，减少旋转延迟。"
+    },
+    {
+        "id": "fzstyl5_39",
+        "题目": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>在测温系统中要实现采样、转换和显示等任务。采样过程把从传感器上得到的整型微电压值存入一个缓冲区，转换过程把微电压值从缓冲区中取出，计算转换成温度值再存入该缓冲区，显示过程把缓冲区中的温度值取出并显示。试用P、V操作实现三个过程共享缓冲区的同步问题。</div>",
+        "类型": "Z",
+        "答案": "<div style='font-family: 宋体; font-size: 14px; line-height: 1.5;'>解决此同步问题的程序段为：<br/><br/>begin<br/>    Buffer: integer;<br/>    SS, SC, SD: semaphore;<br/>    SS := 1; SC := 0; SD := 0;<br/>    cobegin<br/>        Process Sample<br/>        begin<br/>            L1: 获取一个采样值;<br/>            P(SS);<br/>            Buffer := 采样值;<br/>            V(SC);<br/>            goto L1;<br/>        end;<br/>        Process Convert<br/>        begin<br/>            L2: P(SC);<br/>            从Buffer中取出采样值;<br/>            将采样值转换成温度值;<br/>            Buffer := 温度值;<br/>            V(SD);<br/>            goto L2;<br/>        end;<br/>        Process Display<br/>        begin<br/>            L3: P(SD);<br/>            从Buffer中取出温度值;<br/>            V(SS);<br/>            显示温度值;<br/>            goto L3;<br/>        end;<br/>    coend;<br/>end;</div>",
+        "考点": "P、V操作与进程同步",
+        "解析": "三个进程共享缓冲区，需要同步：采样→转换→显示，使用三个信号量控制执行顺序。"
     }
 ]
